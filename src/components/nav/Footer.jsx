@@ -33,11 +33,11 @@ const Footer = () => {
     <footer className='bg-gray-50 dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800'>
       <Container>
         <div className='py-8'>
-          <div className='flex justify-between items-center'>
-            <p className='text-sm text-gray-600 dark:text-gray-400 font-mono'>
+          <div className='flex flex-col sm:flex-row justify-between items-center gap-4 sm:gap-0'>
+            <p className='text-sm text-gray-600 dark:text-gray-400 font-mono text-center sm:text-left'>
               © 2025 RichieKosasihDev
             </p>
-            <p className='text-sm text-gray-600 dark:text-gray-400 font-mono'>
+            <p className='text-sm text-gray-600 dark:text-gray-400 font-mono text-center sm:text-right'>
               Melbourne: {melbourneTime}
             </p>
           </div>
