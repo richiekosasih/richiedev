@@ -140,14 +140,14 @@ const Hero = () => {
             className='hidden md:block'
             style={{ pointerEvents: 'auto', position: 'relative', zIndex: 50 }}
           >
-            Available for freelance
+            Based in Melbourne, Australia
             <br />
             <span
               onClick={copyEmail}
               className='hover:text-neutral-900 transition-colors cursor-pointer underline decoration-dotted underline-offset-2 inline-block'
               style={{ pointerEvents: 'auto', userSelect: 'none' }}
             >
-              richiekosasih@gmail.com
+              richiekosasihde@gmail.com
             </span>
           </div>
           <div className='text-center'>

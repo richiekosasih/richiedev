@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, MessageCircle, CheckCircle, X, Mail } from 'lucide-react';
-import { FaLinkedin, FaGithub, FaInstagram } from 'react-icons/fa';
+import { Send, CheckCircle, X } from 'lucide-react';
+import { FaLinkedin, FaGithub, FaInstagram, FaEnvelope } from 'react-icons/fa';
 import { staggerContainer, staggerItem } from '@/lib/motion';
+import emailjs from '@emailjs/browser';
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/style.css';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    subject: '',
     message: '',
   });
 
@@ -30,16 +32,14 @@ const Contact = () => {
       newErrors.email = 'Email must contain @';
     }
 
-    if (!formData.phone.trim()) {
-      newErrors.phone = 'Phone number is required';
-    } else if (
-      !/^[\+]?[1-9][\d]{0,15}$/.test(formData.phone.replace(/[\s\-\(\)]/g, ''))
-    ) {
-      newErrors.phone = 'Please enter a valid phone number';
-    }
+    if (formData.phone.trim()) {
+      const phoneDigits = formData.phone.replace(/[\s\-\(\)]/g, '');
+      const phoneLength = phoneDigits.length;
 
-    if (!formData.subject.trim()) {
-      newErrors.subject = 'Subject is required';
+      // Basic validation - phone should be between 7-15 digits
+      if (phoneLength < 7 || phoneLength > 15) {
+        newErrors.phone = 'Please enter a valid phone number';
+      }
     }
 
     if (!formData.message.trim()) {
@@ -74,38 +74,79 @@ const Contact = () => {
     }
 
     setIsSubmitting(true);
+    try {
+      // Get EmailJS configuration from environment variables
+      const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+      const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
+      const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
-    // Simulate form submission delay
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Check if all required environment variables are present
+      if (!serviceId || !templateId || !publicKey) {
+        throw new Error(
+          'EmailJS configuration is missing. Please check your environment variables.'
+        );
+      }
 
-    // Create mailto link with the form data
-    const subject = encodeURIComponent(formData.subject || 'Portfolio Contact');
-    const body = encodeURIComponent(
-      `Hi Richie,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}\n\nBest regards,\n${formData.name}`
-    );
+      console.log('=== EMAILJS DEBUG ===');
+      console.log('Service ID:', serviceId);
+      console.log('Template ID:', templateId);
+      console.log('Public Key:', publicKey);
+      console.log('Form Data:', formData);
+      console.log('All env vars:', import.meta.env);
+      console.log('==================');
 
-    // Show success popup
-    setShowSuccess(true);
+      console.log('Sending email with:', {
+        serviceId,
+        templateId,
+        publicKey,
+        templateParams: {
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: formData.phone || '',
+          message: formData.message,
+        },
+      });
 
-    // Open email client
-    window.location.href = `mailto:richiekosasih@gmail.com?subject=${subject}&body=${body}`;
+      const result = await emailjs.send(
+        serviceId,
+        templateId,
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          phone: formData.phone || '',
+          message: formData.message,
+        },
+        {
+          publicKey,
+        }
+      );
 
-    // Reset form after a delay
-    setTimeout(() => {
+      console.log('EmailJS Result:', result);
+
+      setShowSuccess(true);
+
       setFormData({
         name: '',
         email: '',
         phone: '',
-        subject: '',
         message: '',
       });
+    } catch (error) {
+      console.error('EmailJS Error:', error);
+      setErrors((prev) => ({
+        ...prev,
+        submit: `Failed to send message: ${
+          error.message || 'Please try again later.'
+        }`,
+      }));
+    } finally {
       setIsSubmitting(false);
-    }, 2000);
+    }
   };
 
   const socialLinks = [
     {
-      icon: Mail,
+      icon: FaEnvelope,
       label: 'Email',
       href: 'mailto:richiekosasihdev@gmail.com',
     },
@@ -150,8 +191,7 @@ const Contact = () => {
                 MESSAGE SENT!
               </h3>
               <p className='text-gray-600 dark:text-gray-400 font-mono mb-4'>
-                Your email client should open shortly. Thank you for reaching
-                out!
+                Thank you for reaching out! I will get back to you soon.
               </p>
               <button
                 onClick={() => setShowSuccess(false)}
@@ -233,7 +273,7 @@ const Contact = () => {
 
               {/* Right Side - Contact Form */}
               <motion.div variants={staggerItem} className='w-full'>
-                <div className='bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700'>
+                <div className='bg-white dark:bg-gray-800 p-8 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 max-w-2xl lg:max-w-xl mx-auto'>
                   <div className='text-center mb-8'>
                     <h3 className='text-3xl font-black font-mono uppercase tracking-wider mb-2'>
                       DROP ME A LINE
@@ -242,126 +282,161 @@ const Contact = () => {
                   </div>
 
                   <form onSubmit={handleSubmit} className='space-y-6'>
-                    {/* Name and Email Row */}
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                      <div>
-                        <label className='block text-sm font-mono uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2'>
-                          FULL NAME *
-                        </label>
-                        <input
-                          type='text'
-                          name='name'
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          placeholder='Enter your full name'
-                          required
-                          className={`w-full px-4 py-4 bg-gray-50 dark:bg-gray-700 border-2 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none transition-all duration-300 font-mono ${
-                            errors.name
-                              ? 'border-red-500 bg-red-50 dark:bg-red-900/20 focus:border-red-500'
-                              : 'border-gray-300 dark:border-gray-600 focus:border-amber-500 dark:focus:border-amber-400'
-                          }`}
-                        />
-                        {errors.name && (
-                          <motion.p
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className='text-red-500 text-sm font-mono mt-2 flex items-center'
-                          >
-                            <X className='w-4 h-4 mr-1' />
-                            {errors.name}
-                          </motion.p>
-                        )}
-                      </div>
-
-                      <div>
-                        <label className='block text-sm font-mono uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2'>
-                          EMAIL ADDRESS *
-                        </label>
-                        <input
-                          type='email'
-                          name='email'
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          placeholder='Enter your email address'
-                          required
-                          className={`w-full px-4 py-4 bg-gray-50 dark:bg-gray-700 border-2 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none transition-all duration-300 font-mono ${
-                            errors.email
-                              ? 'border-red-500 bg-red-50 dark:bg-red-900/20 focus:border-red-500'
-                              : 'border-gray-300 dark:border-gray-600 focus:border-amber-500 dark:focus:border-amber-400'
-                          }`}
-                        />
-                        {errors.email && (
-                          <motion.p
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className='text-red-500 text-sm font-mono mt-2 flex items-center'
-                          >
-                            <X className='w-4 h-4 mr-1' />
-                            {errors.email}
-                          </motion.p>
-                        )}
-                      </div>
+                    {/* Name Field */}
+                    <div>
+                      <label className='block text-sm font-mono uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2'>
+                        FULL NAME *
+                      </label>
+                      <input
+                        type='text'
+                        name='name'
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder='Enter your full name'
+                        required
+                        className={`w-full px-4 py-4 bg-gray-50 dark:bg-gray-700 border-2 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none transition-all duration-300 font-mono ${
+                          errors.name
+                            ? 'border-red-500 bg-red-50 dark:bg-red-900/20 focus:border-red-500'
+                            : 'border-gray-300 dark:border-gray-600 focus:border-amber-500 dark:focus:border-amber-400'
+                        }`}
+                      />
+                      {errors.name && (
+                        <motion.p
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className='text-red-500 text-sm font-mono mt-2 flex items-center'
+                        >
+                          <X className='w-4 h-4 mr-1' />
+                          {errors.name}
+                        </motion.p>
+                      )}
                     </div>
 
-                    {/* Phone and Subject Row */}
-                    <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-                      <div>
-                        <label className='block text-sm font-mono uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2'>
-                          PHONE NUMBER *
-                        </label>
-                        <input
-                          type='tel'
-                          name='phone'
-                          value={formData.phone}
-                          onChange={handleInputChange}
-                          placeholder='Enter your phone number'
-                          required
-                          className={`w-full px-4 py-4 bg-gray-50 dark:bg-gray-700 border-2 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none transition-all duration-300 font-mono ${
-                            errors.phone
-                              ? 'border-red-500 bg-red-50 dark:bg-red-900/20 focus:border-red-500'
-                              : 'border-gray-300 dark:border-gray-600 focus:border-amber-500 dark:focus:border-amber-400'
-                          }`}
-                        />
-                        {errors.phone && (
-                          <motion.p
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className='text-red-500 text-sm font-mono mt-2 flex items-center'
-                          >
-                            <X className='w-4 h-4 mr-1' />
-                            {errors.phone}
-                          </motion.p>
-                        )}
-                      </div>
+                    {/* Email Field */}
+                    <div>
+                      <label className='block text-sm font-mono uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2'>
+                        EMAIL ADDRESS *
+                      </label>
+                      <input
+                        type='email'
+                        name='email'
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        placeholder='Enter your email address'
+                        required
+                        className={`w-full px-4 py-4 bg-gray-50 dark:bg-gray-700 border-2 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none transition-all duration-300 font-mono ${
+                          errors.email
+                            ? 'border-red-500 bg-red-50 dark:bg-red-900/20 focus:border-red-500'
+                            : 'border-gray-300 dark:border-gray-600 focus:border-amber-500 dark:focus:border-amber-400'
+                        }`}
+                      />
+                      {errors.email && (
+                        <motion.p
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className='text-red-500 text-sm font-mono mt-2 flex items-center'
+                        >
+                          <X className='w-4 h-4 mr-1' />
+                          {errors.email}
+                        </motion.p>
+                      )}
+                    </div>
 
-                      <div>
-                        <label className='block text-sm font-mono uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2'>
-                          SUBJECT *
-                        </label>
-                        <input
-                          type='text'
-                          name='subject'
-                          value={formData.subject}
-                          onChange={handleInputChange}
-                          placeholder='What is this about?'
-                          required
-                          className={`w-full px-4 py-4 bg-gray-50 dark:bg-gray-700 border-2 rounded-lg text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none transition-all duration-300 font-mono ${
-                            errors.subject
-                              ? 'border-red-500 bg-red-50 dark:bg-red-900/20 focus:border-red-500'
-                              : 'border-gray-300 dark:border-gray-600 focus:border-amber-500 dark:focus:border-amber-400'
-                          }`}
-                        />
-                        {errors.subject && (
-                          <motion.p
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className='text-red-500 text-sm font-mono mt-2 flex items-center'
-                          >
-                            <X className='w-4 h-4 mr-1' />
-                            {errors.subject}
-                          </motion.p>
-                        )}
-                      </div>
+                    {/* Phone Number */}
+                    <div>
+                      <label className='block text-sm font-mono uppercase tracking-wider text-gray-700 dark:text-gray-300 mb-2'>
+                        PHONE NUMBER
+                      </label>
+                      <PhoneInput
+                        country={'au'}
+                        onlyCountries={[
+                          'au',
+                          'id',
+                          'us',
+                          'gb',
+                          'jp',
+                          'cn',
+                          'in',
+                          'de',
+                          'fr',
+                          'it',
+                          'es',
+                          'ru',
+                          'br',
+                          'mx',
+                          'kr',
+                          'sg',
+                          'my',
+                          'th',
+                          'vn',
+                          'ph',
+                        ]}
+                        enableSearch={true}
+                        value={formData.phone}
+                        onChange={(phone) =>
+                          setFormData((prev) => ({ ...prev, phone }))
+                        }
+                        inputStyle={{
+                          width: '100%',
+                          height: '56px',
+                          paddingLeft: '60px',
+                          fontSize: '16px',
+                          fontFamily: 'monospace',
+                          backgroundColor: '#f9fafb',
+                          border: '2px solid #d1d5db',
+                          borderRadius: '8px',
+                          color: '#111827',
+                        }}
+                        buttonStyle={{
+                          backgroundColor: '#f9fafb',
+                          border: '2px solid #d1d5db',
+                          borderRadius: '8px 0 0 8px',
+                          height: '56px',
+                        }}
+                        containerStyle={{
+                          width: '100%',
+                        }}
+                        placeholder='Enter phone number'
+                        disableCountryCode={false}
+                        disableDropdown={false}
+                        countryCodeEditable={false}
+                        format='+... ... ... ... ...'
+                        masks={{
+                          au: '... ... ....', // +61 450 966 2120
+                          id: '.... .... ....', // +62 8121 7657 430
+                          us: '... ... ....', // +1 555 123 4567
+                          gb: '.... .... ....', // +44 7700 9001 23
+                          jp: '.. .... ....', // +81 90 1234 5678
+                          cn: '... .... ....', // +86 138 0013 8000
+                          in: '.... .... ....', // +91 9876 5432 10
+                          de: '... ... ...', // +49 123 456 789
+                          fr: '.. .. .. .. ..', // +33 01 23 45 67 89
+                          it: '... ... ....', // +39 123 456 7890
+                          es: '... ... ...', // +34 123 456 789
+                          ru: '... ... .. ..', // +7 123 456 78 90
+                          br: '.. ..... ....', // +55 11 99999 9999
+                          mx: '... ... ....', // +52 123 456 7890
+                          kr: '... .... ....', // +82 123 4567 8901
+                          sg: '.... ....', // +65 1234 5678
+                          my: '... ... ....', // +60 123 456 7890
+                          th: '... ... ...', // +66 123 456 789
+                          vn: '... ... ....', // +84 123 456 7890
+                          ph: '... ... ....', // +63 123 456 7890
+                        }}
+                      />
+                      <p className='text-xs text-gray-500 dark:text-gray-400 font-mono mt-2'>
+                        Optional — include if you prefer a call or WhatsApp.
+                      </p>
+                      {errors.phone && (
+                        <motion.p
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className='text-red-500 text-sm font-mono mt-2 flex items-center'
+                        >
+                          <X className='w-4 h-4 mr-1' />
+                          {errors.phone}
+                        </motion.p>
+                      )}
                     </div>
 
                     {/* Message */}
@@ -382,6 +457,10 @@ const Contact = () => {
                             : 'border-gray-300 dark:border-gray-600 focus:border-amber-500 dark:focus:border-amber-400'
                         }`}
                       />
+                      <p className='text-xs text-gray-500 dark:text-gray-400 font-mono mt-2'>
+                        Helpful details: goals, timeline, budget range, and
+                        links.
+                      </p>
                       {errors.message && (
                         <motion.p
                           initial={{ opacity: 0, y: -10 }}
@@ -418,6 +497,11 @@ const Contact = () => {
                         )}
                       </div>
                     </motion.button>
+                    {errors.submit && (
+                      <p className='text-red-500 text-sm font-mono mt-3 text-center'>
+                        {errors.submit}
+                      </p>
+                    )}
                   </form>
                 </div>
               </motion.div>
@@ -428,8 +512,7 @@ const Contact = () => {
               <p className='text-gray-600 dark:text-gray-400 text-sm max-w-4xl mx-auto text-center font-mono'>
                 I'm available to help with any queries about projects,
                 collaborations, or opportunities. You can reach me directly at
-                richiekosasih@gmail.com or through the form above. I guarantee a
-                response within 24 hours during business days.
+                richiekosasihdev@gmail.com or through the form above.
               </p>
             </div>
           </div>

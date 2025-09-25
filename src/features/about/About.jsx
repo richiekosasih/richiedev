@@ -48,6 +48,7 @@ export default function About() {
       id='about'
       ref={ref}
       className='relative w-full px-6 py-20 md:py-28'
+      style={{ position: 'relative' }}
     >
       {/* Beige canvas background with rounded corners like paper */}
       <div

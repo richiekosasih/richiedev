@@ -140,6 +140,7 @@ const Experience = ({ categories = null }) => {
       id='experience'
       className='w-full py-10 md:py-14 lg:py-16 relative bg-white'
       aria-labelledby='experience-title'
+      style={{ position: 'relative' }}
     >
       {/* Subtle grid background */}
       <div

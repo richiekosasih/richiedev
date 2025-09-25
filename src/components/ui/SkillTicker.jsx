@@ -36,7 +36,7 @@ const SkillTicker = ({
   return (
     <div className={`relative overflow-hidden ${className}`}>
       {/* CSS Keyframes */}
-      <style jsx>{`
+      <style jsx='true'>{`
         @keyframes ticker-left {
           0% {
             transform: translateX(0);

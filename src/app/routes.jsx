@@ -30,43 +30,50 @@ const PageLoader = () => (
   </div>
 );
 
-export const router = createBrowserRouter([
+export const router = createBrowserRouter(
+  [
+    {
+      path: '/',
+      element: <SiteLayout />,
+      children: [
+        {
+          index: true,
+          element: (
+            <Suspense fallback={<PageLoader />}>
+              <Home />
+            </Suspense>
+          ),
+        },
+        {
+          path: 'projects',
+          element: (
+            <Suspense fallback={<PageLoader />}>
+              <Projects />
+            </Suspense>
+          ),
+        },
+        {
+          path: 'contact',
+          element: (
+            <Suspense fallback={<PageLoader />}>
+              <Contact />
+            </Suspense>
+          ),
+        },
+        {
+          path: '*',
+          element: (
+            <Suspense fallback={<PageLoader />}>
+              <NotFound />
+            </Suspense>
+          ),
+        },
+      ],
+    },
+  ],
   {
-    path: '/',
-    element: <SiteLayout />,
-    children: [
-      {
-        index: true,
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Home />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'projects',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Projects />
-          </Suspense>
-        ),
-      },
-      {
-        path: 'contact',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <Contact />
-          </Suspense>
-        ),
-      },
-      {
-        path: '*',
-        element: (
-          <Suspense fallback={<PageLoader />}>
-            <NotFound />
-          </Suspense>
-        ),
-      },
-    ],
-  },
-]);
+    future: {
+      v7_startTransition: true,
+    },
+  }
+);
