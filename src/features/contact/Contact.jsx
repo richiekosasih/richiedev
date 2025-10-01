@@ -18,6 +18,8 @@ const Contact = () => {
   const [errors, setErrors] = useState({});
   const [showSuccess, setShowSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showEmailCopied, setShowEmailCopied] = useState(false);
+  const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
 
   const validateForm = () => {
     const newErrors = {};
@@ -48,6 +50,48 @@ const Contact = () => {
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
+  };
+
+  // Copy email function
+  const copyEmail = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Get cursor position for popup
+    const rect = e.target.getBoundingClientRect();
+    setPopupPosition({
+      x: rect.left + rect.width / 2,
+      y: rect.top - 10,
+    });
+
+    const email = 'richiekosasihdev@gmail.com';
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(email);
+      } else {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = email;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+      }
+
+      // Show success popup
+      setShowEmailCopied(true);
+      setTimeout(() => setShowEmailCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy email:', err);
+      // Still show popup even if copy failed
+      setShowEmailCopied(true);
+      setTimeout(() => setShowEmailCopied(false), 2000);
+    }
   };
 
   const handleInputChange = (e) => {
@@ -511,13 +555,44 @@ const Contact = () => {
             <div className='mt-16 pt-8 border-t border-gray-300 dark:border-gray-800'>
               <p className='text-gray-600 dark:text-gray-400 text-sm max-w-4xl mx-auto text-center font-mono'>
                 I'm available to help with any queries about projects,
-                collaborations, or opportunities. You can reach me directly at
-                richiekosasihdev@gmail.com or through the form above.
+                collaborations, or opportunities. You can reach me directly at{' '}
+                <span
+                  onClick={copyEmail}
+                  className='hover:text-gray-900 dark:hover:text-gray-100 transition-colors cursor-pointer underline decoration-dotted underline-offset-2 inline-block'
+                  style={{ pointerEvents: 'auto', userSelect: 'none' }}
+                >
+                  richiekosasihdev@gmail.com
+                </span>{' '}
+                or through the form above.
               </p>
             </div>
           </div>
         </motion.div>
       </div>
+
+      {/* Email Copied Popup - appears near cursor */}
+      <AnimatePresence>
+        {showEmailCopied && (
+          <motion.div
+            initial={{ opacity: 0, y: 10, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -5, scale: 0.9 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className='fixed z-[9999] pointer-events-none'
+            style={{
+              left: popupPosition.x,
+              top: popupPosition.y,
+              transform: 'translate(-50%, -100%)',
+            }}
+          >
+            <div className='bg-black border border-[#f5f5dc] rounded-lg px-3 py-2 shadow-lg'>
+              <p className='text-[#f5f5dc] font-semibold text-sm whitespace-nowrap'>
+                Email Copied
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 };

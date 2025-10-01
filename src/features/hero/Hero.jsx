@@ -148,7 +148,7 @@ const Hero = () => {
               className='hover:text-neutral-900 transition-colors cursor-pointer underline decoration-dotted underline-offset-2 inline-block'
               style={{ pointerEvents: 'auto', userSelect: 'none' }}
             >
-              richiekosasihde@gmail.com
+              richiekosasihdev@gmail.com
             </span>
           </div>
           <div className='text-center'>

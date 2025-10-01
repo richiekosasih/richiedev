@@ -1,5 +1,5 @@
 // Analytics utilities
-// TODO: Implement analytics tracking (Google Analytics, Vercel Analytics, etc.)
+// Vercel Analytics is now integrated via @vercel/analytics/react in App.jsx
 
 export const trackEvent = (eventName, properties = {}) => {
   if (typeof window !== 'undefined' && window.gtag) {
