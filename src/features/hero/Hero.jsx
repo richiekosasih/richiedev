@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import LightRays from '@/components/ui/LightRays';
 import { useReducedMotion } from 'framer-motion';
+import photorichiemono from '@/assets/images/photorichiemono.jpg';
 
 const Hero = () => {
   // guard LightRays from reduced motion
@@ -106,7 +107,7 @@ const Hero = () => {
           {/* Square portrait */}
           <div className='mx-auto w-[260px] h-[260px] md:w-[360px] md:h-[360px] rounded-md overflow-hidden ring-1 ring-black/10 shadow-lg bg-neutral-200'>
             <img
-              src='/src/assets/images/photorichiemono.jpg'
+              src={photorichiemono}
               alt='Richie Kosasih portrait'
               className='w-full h-full object-cover'
               loading='eager'
