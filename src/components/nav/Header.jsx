@@ -176,7 +176,7 @@ const Header = () => {
           {/* Right: Resume Link */}
           <div className='hidden md:block ml-auto'>
             <a
-              href='/Resume_RichieKosasih.pdf'
+              href='/RichieKosasih_Resume.pdf'
               target='_blank'
               rel='noopener noreferrer'
               className='text-[10px] md:text-xs tracking-widest text-white font-black font-mono uppercase hover:text-gray-300 transition-colors px-4 py-2 border border-white/30 rounded-md hover:border-white/50 hover:bg-white/10'
