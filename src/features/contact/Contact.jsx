@@ -64,7 +64,7 @@ const Contact = () => {
       y: rect.top - 10,
     });
 
-    const email = 'richiekosasihdev@gmail.com';
+    const email = 'richiekosasih@gmail.com';
 
     try {
       if (navigator.clipboard && window.isSecureContext) {
@@ -561,7 +561,7 @@ const Contact = () => {
                   className='hover:text-gray-900 dark:hover:text-gray-100 transition-colors cursor-pointer underline decoration-dotted underline-offset-2 inline-block'
                   style={{ pointerEvents: 'auto', userSelect: 'none' }}
                 >
-                  richiekosasihdev@gmail.com
+                  richiekosasih@gmail.com
                 </span>{' '}
                 or through the form above.
               </p>
