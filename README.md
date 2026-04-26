@@ -1,16 +1,16 @@
-# 🚀 Richie Phinardi Kosasih - Portfolio Website
+#  Richie Phinardi Kosasih - Portfolio Website
 
 Modern, responsive, and professional portfolio website built with React, Vite, and Tailwind CSS. Designed to impress recruiters at top tech companies like Google, Meta, and TikTok.
 
-## 🌟 Live Demo
+## Website
 
 Visit the live website: [https://richiekosasih.com](https://richiekosasih.com)
 
-## 👨‍💻 About This Portfolio
+##  About This Portfolio
 
 This is a professional portfolio showcasing my skills as a Frontend Developer and React Specialist. The website features modern design principles, smooth animations, and responsive layouts optimized for both desktop and mobile devices.
 
-## 🚀 Tech Stack
+##  Tech Stack
 
 - **Frontend Framework**: React 18 (JavaScript)
 - **Build Tool**: Vite
@@ -21,7 +21,7 @@ This is a professional portfolio showcasing my skills as a Frontend Developer an
 - **Icons**: Lucide React
 - **Theme**: Class-based dark mode strategy
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 RPKdev/
@@ -113,33 +113,33 @@ RPKdev/
    npm run preview
    ```
 
-## 🎨 Features
+##  Features
 
-### ✅ Implemented
+###  Implemented
 
-- ⚡ **Vite + React** - Fast development and optimized builds
-- 🎨 **Tailwind CSS** - Utility-first styling with dark mode
-- 🌙 **Dark Mode Toggle** - Persistent theme switching
-- 📱 **Responsive Design** - Mobile-first approach
-- 🎭 **Framer Motion** - Smooth animations and transitions
-- 🧭 **Lazy Routing** - Code splitting for better performance
-- ♿ **Accessibility** - Skip links, ARIA labels, focus management
-- 🎯 **SEO Ready** - Meta tags, semantic HTML structure
-- 🎪 **3D Canvas** - Lazy-loaded Three.js integration
-- 📱 **Mobile Navigation** - Slide-out menu with backdrop
+-  **Vite + React** - Fast development and optimized builds
+-  **Tailwind CSS** - Utility-first styling with dark mode
+-  **Dark Mode Toggle** - Persistent theme switching
+-  **Responsive Design** - Mobile-first approach
+-  **Framer Motion** - Smooth animations and transitions
+-  **Lazy Routing** - Code splitting for better performance
+-  **Accessibility** - Skip links, ARIA labels, focus management
+-  **SEO Ready** - Meta tags, semantic HTML structure
+-  **3D Canvas** - Lazy-loaded Three.js integration
+-  **Mobile Navigation** - Slide-out menu with backdrop
 
-### 🎯 Portfolio Sections
+###  Portfolio Sections
 
 All sections are fully implemented with professional content:
 
-- 🦸 **Hero Section** - Personal introduction with animated text effects and social links
-- 👨‍💻 **About Section** - Professional story, education, and current focus
-- 🛠 **Skills Section** - Technical skills with progress bars and categorization
-- 🚀 **Projects Section** - Featured projects with status indicators and tech stacks
-- 📞 **Contact Section** - Professional contact form and social media links
-- 🎨 **3D Effects** - Interactive comet card with hover animations
+-  **Hero Section** - Personal introduction with animated text effects and social links
+-  **About Section** - Professional story, education, and current focus
+-  **Skills Section** - Technical skills with progress bars and categorization
+-  **Projects Section** - Featured projects with status indicators and tech stacks
+-  **Contact Section** - Professional contact form and social media links
+-  **3D Effects** - Interactive comet card with hover animations
 
-## 🎯 How to Use
+##  How to Use
 
 ### Adding New Sections
 
@@ -237,7 +237,7 @@ const MyComponent = () => {
 };
 ```
 
-## 🔧 Configuration
+##  Configuration
 
 ### Tailwind Config
 
@@ -257,20 +257,20 @@ const MyComponent = () => {
 - Production optimizations included
 - No additional environment variables needed
 
-## ✅ Portfolio Features
+##  Portfolio Features
 
 This portfolio includes:
 
-- ✅ **Personal Branding** - Complete with name, tagline, and professional photo placeholder
-- ✅ **Professional Content** - About section with education and career focus
-- ✅ **Skills Showcase** - Comprehensive technical skills with visual progress indicators
-- ✅ **Project Portfolio** - Featured projects with status, tech stack, and links
-- ✅ **Contact Integration** - Working contact form with email integration
-- ✅ **SEO Optimization** - Complete meta tags, Open Graph, and Twitter Cards
-- ✅ **Performance Optimized** - Lazy loading, code splitting, and optimized animations
-- ✅ **Mobile Responsive** - Perfect mobile experience with touch-friendly interactions
+-  **Personal Branding** - Complete with name, tagline, and professional photo placeholder
+-  **Professional Content** - About section with education and career focus
+-  **Skills Showcase** - Comprehensive technical skills with visual progress indicators
+-  **Project Portfolio** - Featured projects with status, tech stack, and links
+-  **Contact Integration** - Working contact form with email integration
+-  **SEO Optimization** - Complete meta tags, Open Graph, and Twitter Cards
+-  **Performance Optimized** - Lazy loading, code splitting, and optimized animations
+-  **Mobile Responsive** - Perfect mobile experience with touch-friendly interactions
 
-## 🎯 Ready for Job Applications
+##  Ready for Job Applications
 
 This portfolio is specifically designed for applications to:
 
@@ -279,7 +279,7 @@ This portfolio is specifically designed for applications to:
 - **TikTok** - Creative animations and mobile-first approach
 - **Other Tech Companies** - Professional presentation with comprehensive skill showcase
 
-## 🚀 Deployment
+##  Deployment
 
 The project is ready for deployment to:
 
@@ -291,7 +291,7 @@ The project is ready for deployment to:
 Build command: `npm run build`
 Output directory: `dist/`
 
-## 🤝 Contributing
+##  Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -299,10 +299,12 @@ Output directory: `dist/`
 4. Test thoroughly
 5. Submit a pull request
 
-## 📄 License
+##  License
 
 This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-**Built with ❤️ using React, Vite, and Tailwind CSS**
+**Built using React, Vite, and Tailwind CSS**
+
+By Me "Richie"
