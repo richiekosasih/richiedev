@@ -272,12 +272,7 @@ This portfolio includes:
 
 ##  Ready for Job Applications
 
-This portfolio is specifically designed for applications to:
-
-- **Google** - Clean, modern design with focus on technical skills
-- **Meta** - Interactive elements and social media integration
-- **TikTok** - Creative animations and mobile-first approach
-- **Other Tech Companies** - Professional presentation with comprehensive skill showcase
+A personal portfolio website built with React, Vite, and Tailwind CSS to showcase my frontend learning journey and selected projects.
 
 ##  Deployment
 
