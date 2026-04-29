@@ -13,6 +13,7 @@ import {
 import { staggerContainer, staggerItem } from '@/lib/motion';
 import MotionSection from '@/components/ui/MotionSection';
 import projectImage1 from '@/assets/images/ProjectPhoto/projectrichiedev.jpg';
+import projectImage2 from '@/assets/images/ProjectPhoto/yummomdashboard.png';
 import inProgressImage from '@/assets/images/ProjectPhoto/InProgress.jpg';
 
 const Projects = () => {
@@ -130,8 +131,8 @@ const Projects = () => {
       tech: ['React', 'Tailwind CSS', 'Framer Motion', 'Vite'],
       github: 'https://github.com/richiekosasih/richiedev.git',
       demo: 'https://richiekosasih.com',
-      status: 'In Development',
-      statusDescription: 'deploy',
+      status: 'Deployed',
+      statusDescription: 'Live on the web',
       featured: true,
       preview: projectImage1,
     },
@@ -147,7 +148,7 @@ const Projects = () => {
       status: 'In Progress',
       statusDescription: 'Core features implemented, improving UI and structure',
       featured: true,
-      preview: inProgressImage,
+      preview: projectImage2,
     },
     {
       id: 3,
