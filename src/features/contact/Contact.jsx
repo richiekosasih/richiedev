@@ -192,7 +192,7 @@ const Contact = () => {
     {
       icon: FaEnvelope,
       label: 'Email',
-      href: 'mailto:richiekosasihdev@gmail.com',
+      href: 'mailto:richiekosasih@gmail.com',
     },
     {
       icon: FaGithub,
