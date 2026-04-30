@@ -1,6 +1,6 @@
 #  Richie Phinardi Kosasih - Portfolio Website
 
-Modern, responsive, and professional portfolio website built with React, Vite, and Tailwind CSS. Designed to impress recruiters at top tech companies like Google, Meta, and TikTok.
+A responsive personal portfolio website built with React, Vite, and Tailwind CSS to showcase my projects, technical skills, and career transition into IT.
 
 ## Website
 
