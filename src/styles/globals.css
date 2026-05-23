@@ -84,18 +84,6 @@
 }
 
 @layer components {
-  .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
-  }
-
-  .btn-primary {
-    @apply bg-blue-600 text-white hover:bg-blue-700;
-  }
-
-  .btn-secondary {
-    @apply bg-gray-800 text-gray-100 hover:bg-gray-700;
-  }
-
   /* StaggeredMenu Custom Styling */
   .staggered-menu-custom .sm-panel-item {
     font-family: 'Inter', sans-serif !important;
@@ -111,26 +99,5 @@
     background: rgba(0, 0, 0, 0.95) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
-  }
-
-  /* 3D Transform utilities for CometCard */
-  .perspective-distant {
-    perspective: 1000px;
-    perspective-origin: center center;
-  }
-
-  .transform-3d {
-    transform-style: preserve-3d;
-  }
-
-  /* Enhanced 3D effects for better visibility */
-  .comet-card-container {
-    perspective: 1200px;
-    perspective-origin: center center;
-  }
-
-  .comet-card-inner {
-    transform-style: preserve-3d;
-    will-change: transform;
   }
 }

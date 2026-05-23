@@ -371,7 +371,6 @@ export const StaggeredMenu = ({
           !menuPanel.contains(event.target) &&
           !menuButton.contains(event.target)
         ) {
-          console.log('Clicked outside menu, closing...');
           toggleMenu();
         }
       }
@@ -409,7 +408,6 @@ export const StaggeredMenu = ({
           <div
             className='fixed inset-0 bg-black/20 backdrop-blur-sm z-[5]'
             onClick={() => {
-              console.log('Backdrop clicked, closing menu...');
               toggleMenu();
             }}
             style={{ pointerEvents: 'auto' }}
@@ -494,7 +492,7 @@ export const StaggeredMenu = ({
         <aside
           id='staggered-menu-panel'
           ref={panelRef}
-          className='staggered-menu-panel absolute top-0 right-0 h-full bg-white flex flex-col p-[6em_2em_2em_2em] overflow-y-auto z-[15] backdrop-blur-[12px]'
+          className='staggered-menu-panel absolute top-0 right-0 h-full bg-white flex flex-col p-[5em_2em_2em_2em] overflow-y-auto z-[15] backdrop-blur-[12px]'
           style={{
             WebkitBackdropFilter: 'blur(12px)',
             pointerEvents: 'auto',
@@ -503,7 +501,7 @@ export const StaggeredMenu = ({
         >
           <div className='sm-panel-inner flex-1 flex flex-col gap-5'>
             <ul
-              className='sm-panel-list list-none m-0 p-0 flex flex-col gap-2'
+              className='sm-panel-list list-none m-0 p-0 flex flex-col gap-1'
               role='list'
               data-numbering={displayItemNumbering || undefined}
             >
@@ -514,13 +512,11 @@ export const StaggeredMenu = ({
                     key={it.label + idx}
                   >
                     <a
-                      className='sm-panel-item relative text-black font-semibold text-[4rem] cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]'
+                      className='sm-panel-item relative text-black font-semibold text-[2.65rem] sm:text-[4rem] cursor-pointer leading-none tracking-normal uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]'
                       href={it.link}
                       aria-label={it.ariaLabel}
                       data-index={idx + 1}
                       onClick={(e) => {
-                        console.log('Menu item clicked:', it.label, it.link);
-
                         // For anchor links, smooth scroll with header offset
                         if (it.link.startsWith('#')) {
                           e.preventDefault();
@@ -544,10 +540,6 @@ export const StaggeredMenu = ({
 
                         // Close menu after click
                         setTimeout(() => {
-                          console.log(
-                            'Closing menu, current open state:',
-                            openRef.current
-                          );
                           toggleMenu();
                         }, 300);
                       }}
@@ -563,7 +555,7 @@ export const StaggeredMenu = ({
                   className='sm-panel-itemWrap relative overflow-hidden leading-none'
                   aria-hidden='true'
                 >
-                  <span className='sm-panel-item relative text-black font-semibold text-[4rem] cursor-pointer leading-none tracking-[-2px] uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]'>
+                  <span className='sm-panel-item relative text-black font-semibold text-[2.65rem] sm:text-[4rem] cursor-pointer leading-none tracking-normal uppercase transition-[background,color] duration-150 ease-linear inline-block no-underline pr-[1.4em]'>
                     <span className='sm-panel-itemLabel inline-block [transform-origin:50%_100%] will-change-transform'>
                       No items
                     </span>
@@ -574,7 +566,7 @@ export const StaggeredMenu = ({
 
             {displaySocials && socialItems && socialItems.length > 0 && (
               <div
-                className='sm-socials mt-auto pt-6 flex flex-col gap-3 border-t border-gray-200'
+                className='sm-socials mt-6 pt-6 flex flex-col gap-3 border-t border-gray-200'
                 aria-label='Social links'
               >
                 <h3 className='sm-socials-title m-0 text-sm font-medium [color:var(--sm-accent,#ff0000)]'>
@@ -609,10 +601,8 @@ export const StaggeredMenu = ({
                           );
                         }}
                         onClick={() => {
-                          console.log('Social link clicked');
                           // Close menu after clicking social link
                           setTimeout(() => {
-                            console.log('Closing menu from social link');
                             toggleMenu();
                           }, 300);
                         }}

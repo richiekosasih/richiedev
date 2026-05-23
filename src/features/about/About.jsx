@@ -1,182 +1,136 @@
-import {
-  motion,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from 'framer-motion';
-import { useRef } from 'react';
-import { FaLinkedin, FaGithub, FaInstagram } from 'react-icons/fa';
+import { motion, useReducedMotion } from 'framer-motion';
+import { FaGithub, FaInstagram, FaLinkedin } from 'react-icons/fa';
 import portrait from '@/assets/images/aboutphoto.jpg';
+
+const links = [
+  {
+    label: 'LinkedIn',
+    href: 'https://linkedin.com/in/richiekosasih',
+    icon: FaLinkedin,
+  },
+  {
+    label: 'GitHub',
+    href: 'https://github.com/richiekosasih',
+    icon: FaGithub,
+  },
+  {
+    label: 'Instagram',
+    href: 'https://instagram.com/richie_kosasih',
+    icon: FaInstagram,
+  },
+];
+
+const ease = [0.16, 1, 0.3, 1];
 
 export default function About() {
   const reduce = useReducedMotion();
-  const ref = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start 80%', 'end 20%'],
-  });
 
-  // Enhanced parallax and float for the portrait
-  const y = reduce ? 0 : useTransform(scrollYProgress, [0, 1], [20, -20]);
-  const r = reduce ? 0 : useTransform(scrollYProgress, [0, 1], [-2, 2]);
-
-  // Easing shortcut - smoother curve for longer transitions
-  const ease = [0.16, 1, 0.3, 1];
-
-  // Variants
-  const fadeUp = reduce
-    ? { initial: { opacity: 1, y: 0 }, whileInView: { opacity: 1, y: 0 } }
+  const reveal = reduce
+    ? {
+        initial: { opacity: 1, y: 0 },
+        whileInView: { opacity: 1, y: 0 },
+      }
     : {
-        initial: { opacity: 0, y: 24 },
-        whileInView: { opacity: 1, y: 0, transition: { duration: 2, ease } },
-      };
-
-  const headline = reduce
-    ? { initial: { opacity: 1 }, whileInView: { opacity: 1 } }
-    : {
-        initial: { opacity: 0.001, scale: 0.96, skewY: 6 },
-        whileInView: {
-          opacity: 1,
-          scale: 1,
-          skewY: 0,
-          transition: { duration: 2, ease },
-        },
+        initial: { opacity: 0, y: 28 },
+        whileInView: { opacity: 1, y: 0 },
       };
 
   return (
     <section
       id='about'
-      ref={ref}
-      className='relative w-full px-6 py-20 md:py-28'
-      style={{ position: 'relative' }}
+      className='relative overflow-hidden bg-[#f4f2e8] px-4 py-16 text-black sm:px-6 md:px-10 md:py-24'
+      aria-labelledby='about-title'
     >
-      {/* Beige canvas background with rounded corners like paper */}
-      <div
-        className='absolute inset-6 rounded-3xl shadow-2xl'
-        style={{ backgroundColor: '#f5f5dc' }}
-      />
-
-      {/* Content container */}
-      <div className='relative mx-auto w-full max-w-4xl lg:max-w-5xl px-6 text-[#1b1b1b]'>
-        {/* Giant editorial headline */}
-        <motion.h2
-          {...headline}
-          viewport={{ once: true, amount: 0.5 }}
-          className='text-[56px] leading-none md:text-[120px] md:leading-none font-black tracking-tight uppercase'
-          style={{ letterSpacing: '-0.02em' }}
-        >
-          About <span className='inline-block md:block'>Me</span>
-        </motion.h2>
-
-        {/* Copy blocks + portrait */}
-        <div className='mt-10 md:mt-14 grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-14 items-start'>
-          {/* Left column: copy */}
-          <div className='space-y-6'>
-            <motion.p
-              variants={fadeUp}
-              initial='initial'
-              whileInView='whileInView'
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ delay: 0.8 }}
-              className='font-mono text-[13px] md:text-[14px] leading-7 tracking-wide text-[#2a2a2a]'
-            >
-              Hi, I'm Richie. I'm a frontend-focused developer with a curiosity
-              for design and interaction. I build modern, responsive interfaces
-              with React and Tailwind, aiming for clarity, speed, and a sense of
-              calm motion.
-            </motion.p>
-
-            <motion.p
-              variants={fadeUp}
-              initial='initial'
-              whileInView='whileInView'
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ delay: 0.8 }}
-              className='font-mono text-[13px] md:text-[14px] leading-7 tracking-wide text-[#2a2a2a]'
-            >
-              I enjoy crafting simple interactions that feel intentional: smooth
-              reveals, tidy layouts, and type that communicates. Beyond the
-              editor, I explore design ideas, play games, music, and look for
-              inspiration in everyday details.
-            </motion.p>
-
-            <motion.p
-              variants={fadeUp}
-              initial='initial'
-              whileInView='whileInView'
-              viewport={{ once: true, amount: 0.4 }}
-              transition={{ delay: 0.8 }}
-              className='font-mono text-[13px] md:text-[14px] leading-7 tracking-wide text-[#2a2a2a]'
-            >
-              I believe that learning is an ongoing process—every project is a
-              chance to sharpen skills, experiment, and create something
-              meaningful. What excites me most is turning small ideas into
-              digital experiences that others can see, touch, and use.
-            </motion.p>
-
-            {/* Social media icons - Desktop only */}
-            <motion.div
-              variants={fadeUp}
-              initial='initial'
-              whileInView='whileInView'
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ delay: 1 }}
-              className='pt-4 hidden md:block'
-            >
-              <div className='flex items-center gap-4'>
-                {/* LinkedIn */}
-                <a
-                  href='https://linkedin.com/in/richiekosasih'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='group relative w-10 h-10 rounded-full ring-1 ring-black/20 bg-black/5 flex items-center justify-center transition-all duration-300 hover:bg-black/10 hover:ring-black/30'
-                >
-                  <FaLinkedin className='w-5 h-5 text-[#1b1b1b]' />
-                </a>
-
-                {/* GitHub */}
-                <a
-                  href='https://github.com/richiekosasih'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='group relative w-10 h-10 rounded-full ring-1 ring-black/20 bg-black/5 flex items-center justify-center transition-all duration-300 hover:bg-black/10 hover:ring-black/30'
-                >
-                  <FaGithub className='w-5 h-5 text-[#1b1b1b]' />
-                </a>
-
-                {/* Instagram */}
-                <a
-                  href='https://instagram.com/richie_kosasih'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='group relative w-10 h-10 rounded-full ring-1 ring-black/20 bg-black/5 flex items-center justify-center transition-all duration-300 hover:bg-black/10 hover:ring-black/30'
-                >
-                  <FaInstagram className='w-5 h-5 text-[#1b1b1b]' />
-                </a>
-              </div>
-            </motion.div>
-          </div>
-
-          {/* Right column: portrait with parallax + soft frame */}
-          <motion.figure
-            initial={reduce ? {} : { opacity: 0, scale: 0.9, y: 30 }}
-            whileInView={reduce ? {} : { opacity: 1, scale: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 1.6, ease, delay: 0.6 }}
-            className='relative mx-auto w-[260px] h-[320px] md:w-[360px] md:h-[440px] rounded-xl overflow-hidden'
-            style={{ y, rotate: r }}
+      <div className='mx-auto grid max-w-[1500px] gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-end'>
+        <div>
+          <motion.p
+            {...reveal}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.7, ease }}
+            className='font-mono text-xs uppercase text-black/45'
           >
-            <img
-              src={portrait}
-              alt='Richie Kosasih portrait'
-              className='w-full h-full object-cover grayscale'
-              loading='lazy'
-            />
-            {/* Soft paper tint + border */}
-            <div className='absolute inset-0 ring-1 ring-black/15' />
-            <div className='pointer-events-none absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent' />
-          </motion.figure>
+            About me
+          </motion.p>
+          <motion.h2
+            id='about-title'
+            {...reveal}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.8, ease, delay: reduce ? 0 : 0.05 }}
+            className='mt-4 font-display text-[clamp(5rem,16vw,17rem)] uppercase leading-[0.78] tracking-normal'
+          >
+            Build with
+            <span className='block'>context.</span>
+          </motion.h2>
         </div>
+
+        <motion.div
+          {...reveal}
+          viewport={{ once: true, amount: 0.35 }}
+          transition={{ duration: 0.8, ease, delay: reduce ? 0 : 0.15 }}
+          className='grid gap-7'
+        >
+          <p className='text-xl leading-8 md:text-2xl md:leading-9'>
+            I am a frontend-focused Master of IT student in Melbourne with a
+            background in ICT support, business operations, and practical React
+            projects.
+          </p>
+          <p className='font-mono text-sm leading-7 text-black/65'>
+            My strongest lane is connecting user needs, business process, and
+            clean UI implementation. I like building interfaces that are clear,
+            responsive, and useful for real daily workflows.
+          </p>
+          <div className='flex flex-wrap gap-3'>
+            {links.map(({ label, href, icon: Icon }) => (
+              <a
+                key={label}
+                href={href}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='group inline-flex items-center gap-2 border border-black px-4 py-3 font-mono text-xs uppercase transition-colors hover:bg-black hover:text-[#f4f2e8]'
+              >
+                <Icon className='h-4 w-4 transition-transform group-hover:-translate-y-0.5' />
+                {label}
+              </a>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+
+      <div className='mx-auto mt-12 grid max-w-[1500px] gap-6 border-t border-black pt-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-end'>
+        <motion.figure
+          initial={reduce ? false : { opacity: 0, y: 24, rotate: 1.5 }}
+          whileInView={{ opacity: 1, y: 0, rotate: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.9, ease }}
+          className='relative max-w-sm overflow-hidden border border-black bg-black lg:max-w-md'
+        >
+          <img
+            src={portrait}
+            alt='Richie Kosasih standing outdoors'
+            className='aspect-[4/5] w-full object-cover grayscale'
+            loading='lazy'
+          />
+        </motion.figure>
+
+        <motion.div
+          {...reveal}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease, delay: reduce ? 0 : 0.1 }}
+          className='grid gap-4 font-mono text-xs uppercase leading-6 text-black/65 md:grid-cols-3'
+        >
+          <p>
+            Currently studying Master of Information Technology (Extension) at
+            Kaplan Business School.
+          </p>
+          <p>
+            Hands-on with React, Tailwind, JavaScript, Azure, Entra ID, Cisco
+            Meraki, and business documentation.
+          </p>
+          <p>
+            Looking for junior roles where technical learning, operations
+            context, and problem solving all matter.
+          </p>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,172 +1,260 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import LightRays from '@/components/ui/LightRays';
-import { useReducedMotion } from 'framer-motion';
+import { useRef, useState } from 'react';
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'framer-motion';
+import { FaGithub, FaLinkedin } from 'react-icons/fa';
+import { FileText } from 'lucide-react';
+import KineticMarquee from '@/components/ui/KineticMarquee';
 import photorichiemono from '@/assets/images/photorichiemono.jpg';
 
-const Hero = () => {
-  // guard LightRays from reduced motion
+const roles = [
+  'Frontend Development',
+  'ICT Support',
+  'Business Systems',
+];
+
+const proofPoints = [
+  { label: 'Location', value: 'Melbourne, Australia' },
+  { label: 'Focus', value: 'React + IT Operations' },
+  { label: 'Status', value: 'Open to junior roles' },
+];
+
+const links = [
+  {
+    label: 'Resume',
+    href: '/RichiePKosasih_Resume.pdf',
+    icon: FileText,
+  },
+  {
+    label: 'LinkedIn',
+    href: 'https://linkedin.com/in/richiekosasih',
+    icon: FaLinkedin,
+  },
+  {
+    label: 'GitHub',
+    href: 'https://github.com/richiekosasih',
+    icon: FaGithub,
+  },
+];
+
+const ease = [0.16, 1, 0.3, 1];
+
+export default function Hero() {
   const reduce = useReducedMotion();
-  const [enableRays, setEnableRays] = useState(false);
+  const sectionRef = useRef(null);
   const [showEmailCopied, setShowEmailCopied] = useState(false);
   const [popupPosition, setPopupPosition] = useState({ x: 0, y: 0 });
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+  const titleY = useTransform(scrollYProgress, [0, 1], [0, -90]);
+  const portraitY = useTransform(scrollYProgress, [0, 1], [0, 70]);
 
-  useEffect(() => {
-    const isSmall = window.matchMedia('(max-width: 767px)').matches;
-    setEnableRays(!reduce && !isSmall);
-  }, [reduce]);
+  const reveal = reduce
+    ? {
+        initial: { opacity: 1, y: 0 },
+        animate: { opacity: 1, y: 0 },
+      }
+    : {
+        initial: { opacity: 0, y: 34 },
+        animate: { opacity: 1, y: 0 },
+      };
 
-  // Copy email function
   const copyEmail = async (e) => {
     e.preventDefault();
-    e.stopPropagation();
 
-    // Get cursor position for popup
-    const rect = e.target.getBoundingClientRect();
+    const rect = e.currentTarget.getBoundingClientRect();
     setPopupPosition({
       x: rect.left + rect.width / 2,
       y: rect.top - 10,
     });
 
-    const email = 'richiekosasih@gmail.com';
-
     try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(email);
-      } else {
-        // Fallback for older browsers
-        const textArea = document.createElement('textarea');
-        textArea.value = email;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        textArea.style.top = '-999999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        document.execCommand('copy');
-        textArea.remove();
-      }
-
-      // Show success popup
+      await navigator.clipboard.writeText('richiekosasihdev@gmail.com');
       setShowEmailCopied(true);
-      setTimeout(() => setShowEmailCopied(false), 2000);
-    } catch (err) {
-      console.error('Failed to copy email:', err);
-      // Still show popup even if copy failed
-      setShowEmailCopied(true);
-      setTimeout(() => setShowEmailCopied(false), 2000);
+      setTimeout(() => setShowEmailCopied(false), 1700);
+    } catch {
+      window.location.href = 'mailto:richiekosasihdev@gmail.com';
     }
   };
 
   return (
-    // Semantic HTML: Using <section> with proper heading hierarchy
     <section
+      ref={sectionRef}
       id='home'
-      className='relative min-h-screen flex items-center justify-center px-4 md:px-8 overflow-hidden bg-black'
+      className='relative isolate min-h-[calc(100vh-5rem)] overflow-hidden bg-[#f4f2e8] text-black'
     >
-      {enableRays ? (
-        <div className='absolute inset-0'>
-          <LightRays
-            raysOrigin='top-center'
-            raysColor='#ffffff'
-            raysSpeed={0.6}
-            lightSpread={0.6}
-            rayLength={3}
-            followMouse={false}
-          />
-        </div>
-      ) : (
-        <div className='absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(59,130,246,0.15),_transparent_60%)] pointer-events-none' />
-      )}
+      <motion.div
+        aria-hidden='true'
+        className='absolute inset-x-0 top-0 h-px bg-black'
+        initial={reduce ? false : { scaleX: 0 }}
+        animate={reduce ? false : { scaleX: 1 }}
+        transition={{ duration: 1, ease }}
+      />
 
-      {/* Canvas: the beige "page" inside a black frame */}
-      <div
-        className='relative w-full max-w-7xl rounded-3xl bg-canvas text-neutral-900 shadow-2xl overflow-hidden'
-        style={{ pointerEvents: 'auto' }}
-      >
-        {/* Giant editorial headline */}
-        <h1
-          className='px-4 md:px-8 mt-4 md:mt-2 text-center
-                     font-black uppercase leading-none
-                     text-[64px] md:text-[144px] lg:text-[200px]
-                     tracking-tight'
-          style={{ letterSpacing: '-0.02em' }}
+      <div className='mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-[1500px] flex-col px-4 py-5 sm:px-6 md:px-10 md:py-8'>
+        <motion.div
+          className='grid grid-cols-2 items-start gap-4 text-[11px] font-mono uppercase leading-5 text-black/70 md:grid-cols-4'
+          variants={{
+            animate: {
+              transition: { staggerChildren: reduce ? 0 : 0.08 },
+            },
+          }}
+          initial='initial'
+          animate='animate'
         >
-          Creative <span className='block'>Developer</span>
-        </h1>
-
-        {/* Middle area: side notes + square photo + latest work */}
-        <div className='relative grid grid-cols-1 md:grid-cols-3 items-center gap-6 md:gap-10 px-6 md:px-10 py-10'>
-          {/* Left quotes list */}
-          <div className='hidden md:block font-mono text-[10px] leading-5 tracking-widest uppercase text-neutral-700'>
-            <div>Ideas into action</div>
-            <div>Design. Build. Repeat (UI/UX)</div>
-            <div>From sketch to screen</div>
-          </div>
-
-          {/* Square portrait */}
-          <div className='mx-auto w-[260px] h-[260px] md:w-[360px] md:h-[360px] rounded-md overflow-hidden ring-1 ring-black/10 shadow-lg bg-neutral-200'>
-            <img
-              src={photorichiemono}
-              alt='Richie Kosasih portrait'
-              className='w-full h-full object-cover'
-              loading='eager'
-            />
-          </div>
-
-          {/* Right tiny "introduce myself" label - Desktop (vertical) */}
-          <div className='hidden md:flex flex-col items-start justify-center'>
-            <span className='font-mono text-[10px] tracking-widest uppercase text-neutral-700'>
-              Hi I'm
-            </span>
-            <span className='mt-2 font-black text-3xl tracking-tight uppercase'>
-              Richie
-            </span>
-          </div>
-
-          {/* Mobile "introduce myself" label - Horizontal layout */}
-          <div className='md:hidden flex items-center gap-3 justify-center'>
-            <span className='font-mono text-[10px] tracking-widest uppercase text-neutral-700'>
-              Hi I'm
-            </span>
-            <span className='font-black text-2xl tracking-tight uppercase'>
-              Richie
-            </span>
-          </div>
-        </div>
-
-        {/* Bottom meta line */}
-        <div className='px-5 md:px-8 pb-6 font-mono text-[10px] md:text-[11px] leading-relaxed tracking-widest uppercase text-neutral-700 grid grid-cols-1 md:grid-cols-3 gap-4'>
-          <div
-            className='hidden md:block'
-            style={{ pointerEvents: 'auto', position: 'relative', zIndex: 50 }}
-          >
-            Based in Melbourne, Australia
-            <br />
-            <span
-              onClick={copyEmail}
-              className='hover:text-neutral-900 transition-colors cursor-pointer underline decoration-dotted underline-offset-2 inline-block'
-              style={{ pointerEvents: 'auto', userSelect: 'none' }}
+          {proofPoints.map((item) => (
+            <motion.div
+              key={item.label}
+              variants={reveal}
+              transition={{ duration: 0.7, ease }}
+              className='border-t border-black/20 pt-2'
             >
-              richiekosasih@gmail.com
+              <p className='text-black/45'>{item.label}</p>
+              <p className='mt-1 text-black'>{item.value}</p>
+            </motion.div>
+          ))}
+          <motion.button
+            type='button'
+            onClick={copyEmail}
+            variants={reveal}
+            transition={{ duration: 0.7, ease }}
+            className='border-t border-black/20 pt-2 text-left uppercase transition-colors hover:text-black/60'
+          >
+            <span className='block text-black/45'>Email</span>
+            <span className='mt-1 block underline decoration-black/30 underline-offset-4'>
+              richiekosasihdev@gmail.com
             </span>
+          </motion.button>
+        </motion.div>
+
+        <div className='grid flex-1 items-center gap-8 py-10 lg:grid-cols-[1fr_360px] lg:py-8 xl:grid-cols-[1fr_420px]'>
+          <div className='min-w-0'>
+            <motion.p
+              {...reveal}
+              transition={{ duration: 0.8, ease, delay: reduce ? 0 : 0.1 }}
+              className='font-mono text-xs uppercase text-black/55 md:text-sm'
+            >
+              Richie Phinardi Kosasih
+            </motion.p>
+
+            <motion.h1
+              className='mt-4 max-w-6xl font-display text-[clamp(5.2rem,18vw,18rem)] uppercase leading-[0.82] tracking-normal'
+              initial={reduce ? false : 'initial'}
+              animate='animate'
+              style={reduce ? undefined : { y: titleY }}
+              variants={{
+                animate: {
+                  transition: { staggerChildren: reduce ? 0 : 0.08 },
+                },
+              }}
+              aria-label='Richie Kosasih'
+            >
+              {['Richie', 'Kosasih'].map((word) => (
+                <motion.span
+                  key={word}
+                  className='block overflow-hidden'
+                  variants={reveal}
+                  transition={{ duration: 0.9, ease }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </motion.h1>
+
+            <motion.div
+              {...reveal}
+              transition={{ duration: 0.8, ease, delay: reduce ? 0 : 0.35 }}
+              className='mt-6 grid gap-3 border-y border-black py-5 md:grid-cols-[1fr_1.2fr]'
+            >
+              <div className='font-mono text-xs uppercase leading-6 text-black/65'>
+                Available for entry-level opportunities in web, IT support, and
+                business systems.
+              </div>
+              <div className='flex flex-wrap gap-2'>
+                {roles.map((role) => (
+                  <span
+                    key={role}
+                    className='rounded-full border border-black px-3 py-2 font-mono text-[11px] uppercase leading-none text-black md:text-xs'
+                  >
+                    / {role}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
           </div>
-          <div className='text-center'>
-            I design and develop modern, responsive web applications that
-            combine performance, clean UI, and lasting user experiences.
-          </div>
-          <div className='text-right'>[ RPKDEV 2025 ]</div>
+
+          <motion.aside
+            initial={reduce ? false : { opacity: 0, y: 24, rotate: -1 }}
+            animate={{ opacity: 1, y: 0, rotate: 0 }}
+            transition={{ duration: 0.9, ease, delay: reduce ? 0 : 0.25 }}
+            className='relative mx-auto w-full max-w-[340px] lg:max-w-none'
+          >
+            <motion.div
+              className='relative aspect-[4/5] overflow-hidden border border-black bg-black shadow-[10px_10px_0_#000]'
+              style={reduce ? undefined : { y: portraitY }}
+            >
+              <img
+                src={photorichiemono}
+                alt='Richie Kosasih portrait'
+                className='h-full w-full object-cover grayscale'
+                loading='eager'
+              />
+              <div className='absolute inset-x-0 bottom-0 flex items-end justify-between bg-gradient-to-t from-black/80 to-transparent p-4 font-mono text-[11px] uppercase text-white'>
+                <span>Recent focus</span>
+                <span>React dashboard</span>
+              </div>
+            </motion.div>
+            <div className='mt-5 grid grid-cols-3 gap-2'>
+              {links.map(({ label, href, icon: Icon }) => (
+                <a
+                  key={label}
+                  href={href}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='group flex items-center justify-center gap-2 border border-black px-3 py-3 font-mono text-[11px] uppercase transition-colors hover:bg-black hover:text-[#f4f2e8]'
+                >
+                  <Icon className='h-4 w-4 transition-transform group-hover:-translate-y-0.5' />
+                  <span className='hidden sm:inline lg:hidden xl:inline'>
+                    {label}
+                  </span>
+                </a>
+              ))}
+            </div>
+          </motion.aside>
         </div>
+
+        <motion.div
+          initial={reduce ? false : { opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease, delay: reduce ? 0 : 0.45 }}
+          className='-mx-4 border-y border-black bg-black py-3 text-[#f4f2e8] sm:-mx-6 md:-mx-10'
+        >
+          <KineticMarquee
+            items={[
+              'Frontend',
+              'IT Support',
+              'Business Systems',
+              'React',
+              'Melbourne',
+            ]}
+            speedSeconds={26}
+          />
+        </motion.div>
       </div>
 
-      {/* Email Copied Popup - appears near cursor */}
       <AnimatePresence>
         {showEmailCopied && (
           <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.8 }}
+            initial={{ opacity: 0, y: 10, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -5, scale: 0.9 }}
-            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            exit={{ opacity: 0, y: -5, scale: 0.95 }}
+            transition={{ duration: 0.2, ease }}
             className='fixed z-[9999] pointer-events-none'
             style={{
               left: popupPosition.x,
@@ -174,9 +262,9 @@ const Hero = () => {
               transform: 'translate(-50%, -100%)',
             }}
           >
-            <div className='bg-black border border-[#f5f5dc] rounded-lg px-3 py-2 shadow-lg'>
-              <p className='text-[#f5f5dc] font-semibold text-sm whitespace-nowrap'>
-                Email Copied
+            <div className='border border-[#f4f2e8] bg-black px-3 py-2 shadow-lg'>
+              <p className='whitespace-nowrap font-mono text-xs uppercase text-[#f4f2e8]'>
+                Email copied
               </p>
             </div>
           </motion.div>
@@ -184,6 +272,4 @@ const Hero = () => {
       </AnimatePresence>
     </section>
   );
-};
-
-export default Hero;
+}

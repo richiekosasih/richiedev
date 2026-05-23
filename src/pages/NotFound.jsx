@@ -1,75 +1,36 @@
-import React from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Home, ArrowLeft } from 'lucide-react';
-import Container from '@/components/ui/Container';
-import Button from '@/components/ui/Button';
-import { fadeIn, slideUp } from '@/lib/motion';
+import { ArrowLeft, Home } from 'lucide-react';
 
-const NotFound = () => {
+export default function NotFound() {
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-blue-900/20'>
-      <Container>
-        <motion.div
-          initial='initial'
-          animate='animate'
-          className='text-center max-w-2xl mx-auto'
-        >
-          {/* 404 Number */}
-          <motion.div variants={fadeIn} className='mb-8'>
-            <h1 className='text-9xl md:text-[12rem] font-bold text-gray-200 dark:text-gray-800 select-none'>
-              404
-            </h1>
-          </motion.div>
-
-          {/* Error Message */}
-          <motion.div variants={slideUp} className='space-y-6'>
-            <h2 className='text-3xl md:text-4xl font-bold text-gray-900 dark:text-white'>
-              Page Not Found
-            </h2>
-
-            <p className='text-lg text-gray-600 dark:text-gray-400 max-w-md mx-auto'>
-              Sorry, the page you are looking for doesn't exist or has been
-              moved.
-            </p>
-          </motion.div>
-
-          {/* Action Buttons */}
-          <motion.div
-            variants={slideUp}
-            className='flex flex-col sm:flex-row items-center justify-center gap-4 mt-8'
+    <div className='min-h-screen bg-[#f4f2e8] px-4 py-20 text-black sm:px-6 md:px-10'>
+      <div className='mx-auto flex min-h-[70vh] max-w-[1500px] flex-col justify-center'>
+        <p className='font-mono text-xs uppercase text-black/45'>404</p>
+        <h1 className='mt-4 font-display text-[clamp(6rem,24vw,22rem)] uppercase leading-[0.78] tracking-normal'>
+          Page
+          <span className='block'>not found</span>
+        </h1>
+        <p className='mt-6 max-w-xl text-xl leading-8 text-black/65'>
+          The page you are looking for does not exist or has moved.
+        </p>
+        <div className='mt-8 flex flex-wrap gap-3'>
+          <Link
+            to='/'
+            className='inline-flex items-center gap-2 border border-black px-4 py-3 font-mono text-xs uppercase transition-colors hover:bg-black hover:text-[#f4f2e8]'
           >
-            <Link to='/'>
-              <Button size='lg' className='flex items-center space-x-2'>
-                <Home className='w-5 h-5' />
-                <span>Go Home</span>
-              </Button>
-            </Link>
-
-            <Button
-              variant='outline'
-              size='lg'
-              onClick={() => window.history.back()}
-              className='flex items-center space-x-2'
-            >
-              <ArrowLeft className='w-5 h-5' />
-              <span>Go Back</span>
-            </Button>
-          </motion.div>
-
-          {/* Decorative Elements */}
-          <motion.div
-            variants={fadeIn}
-            className='mt-16 text-gray-400 dark:text-gray-600'
+            <Home className='h-4 w-4' />
+            Go home
+          </Link>
+          <button
+            type='button'
+            onClick={() => window.history.back()}
+            className='inline-flex items-center gap-2 border border-black px-4 py-3 font-mono text-xs uppercase transition-colors hover:bg-black hover:text-[#f4f2e8]'
           >
-            <p className='text-sm'>
-              Lost in space? Let's get you back on track.
-            </p>
-          </motion.div>
-        </motion.div>
-      </Container>
+            <ArrowLeft className='h-4 w-4' />
+            Go back
+          </button>
+        </div>
+      </div>
     </div>
   );
-};
-
-export default NotFound;
+}

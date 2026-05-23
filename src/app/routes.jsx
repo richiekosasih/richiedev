@@ -5,8 +5,6 @@ import { Skeleton } from '@/components/ui/Skeleton';
 
 // Lazy load pages
 const Home = lazy(() => import('@/pages/Home'));
-const Projects = lazy(() => import('@/pages/Projects'));
-const Contact = lazy(() => import('@/pages/Contact'));
 const NotFound = lazy(() => import('@/pages/NotFound'));
 
 // Loading fallback component
@@ -41,22 +39,6 @@ export const router = createBrowserRouter(
           element: (
             <Suspense fallback={<PageLoader />}>
               <Home />
-            </Suspense>
-          ),
-        },
-        {
-          path: 'projects',
-          element: (
-            <Suspense fallback={<PageLoader />}>
-              <Projects />
-            </Suspense>
-          ),
-        },
-        {
-          path: 'contact',
-          element: (
-            <Suspense fallback={<PageLoader />}>
-              <Contact />
             </Suspense>
           ),
         },

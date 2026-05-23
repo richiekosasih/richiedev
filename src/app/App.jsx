@@ -8,7 +8,7 @@ import { SpeedInsights } from '@vercel/speed-insights/react';
 function App() {
   return (
     <PreloaderProvider>
-      <RouterProvider router={router} />
+      <RouterProvider router={router} future={{ v7_startTransition: true }} />
       <Analytics />
       <SpeedInsights />
     </PreloaderProvider>

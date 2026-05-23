@@ -1,626 +1,259 @@
-import React, { useState, useEffect } from 'react';
-import Section from '@/components/ui/Section';
-import Card from '@/components/ui/Card';
-import Button from '@/components/ui/Button';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import {
-  Github,
-  ExternalLink,
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-} from 'lucide-react';
-import { staggerContainer, staggerItem } from '@/lib/motion';
-import MotionSection from '@/components/ui/MotionSection';
-import projectImage1 from '@/assets/images/ProjectPhoto/projectrichiedev.jpg';
-import projectImage2 from '@/assets/images/ProjectPhoto/yummomdashboard.png';
-import inProgressImage from '@/assets/images/ProjectPhoto/InProgress.jpg';
+import { useState } from 'react';
+import { motion, useReducedMotion } from 'framer-motion';
+import { ExternalLink, Github } from 'lucide-react';
+import KineticMarquee from '@/components/ui/KineticMarquee';
+import TiltCard from '@/components/ui/TiltCard';
+import portfolioPreview from '@/assets/images/ProjectPhoto/projectrichiedev.jpg';
+import dashboardPreview from '@/assets/images/ProjectPhoto/yummomdashboard.png';
+import inProgressPreview from '@/assets/images/ProjectPhoto/InProgress.jpg';
 
-const Projects = () => {
-  const [hoveredCard, setHoveredCard] = useState(null);
-  const [currentProjectIndex, setCurrentProjectIndex] = useState(0);
-  const [touchStart, setTouchStart] = useState(null);
-  const [touchEnd, setTouchEnd] = useState(null);
-  const [isSwiping, setIsSwiping] = useState(false);
+const projects = [
+  {
+    title: 'Yummom Dashboard',
+    eyebrow: 'Featured build',
+    description:
+      'A business dashboard for a frozen food operation to manage products, inventory, orders, expenses, stock alerts, and daily summaries.',
+    impact: 'Built around real operational workflows, not a generic UI demo.',
+    tech: ['React', 'JavaScript', 'Tailwind', 'LocalStorage', 'CRUD'],
+    github: 'https://github.com/richiekosasih/yummom-dashboard.git',
+    demo: null,
+    image: dashboardPreview,
+  },
+  {
+    title: 'Personal Portfolio',
+    eyebrow: 'Live site',
+    description:
+      'A responsive recruiter-facing portfolio built with React, Vite, Tailwind, Framer Motion, accessibility structure, and SEO metadata.',
+    impact: 'Shows frontend craft, motion direction, component structure, and deployment readiness.',
+    tech: ['React', 'Vite', 'Tailwind', 'Framer Motion'],
+    github: 'https://github.com/richiekosasih/richiedev.git',
+    demo: 'https://richiekosasih.com',
+    image: portfolioPreview,
+  },
+];
 
-  const nextProject = () => {
-    setCurrentProjectIndex((prev) => (prev + 1) % projects.length);
-  };
+const explorations = [
+  'AI-assisted developer tooling',
+  'Responsive commerce interfaces',
+  'Business process automation',
+];
 
-  const prevProject = () => {
-    setCurrentProjectIndex(
-      (prev) => (prev - 1 + projects.length) % projects.length
-    );
-  };
+const ease = [0.16, 1, 0.3, 1];
 
-  // Touch and mouse handlers for mobile swipe
-  const handleTouchStart = (e) => {
-    e.preventDefault();
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX);
-    setIsSwiping(true);
-  };
+export default function Projects() {
+  const reduce = useReducedMotion();
+  const [activeProject, setActiveProject] = useState(projects[0]);
 
-  const handleTouchMove = (e) => {
-    e.preventDefault();
-    setTouchEnd(e.targetTouches[0].clientX);
-  };
-
-  const handleTouchEnd = (e) => {
-    e.preventDefault();
-    setIsSwiping(false);
-    if (!touchStart || !touchEnd) return;
-
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    console.log('Touch swipe:', { distance, isLeftSwipe, isRightSwipe });
-
-    if (isLeftSwipe) {
-      nextProject();
-    } else if (isRightSwipe) {
-      prevProject();
-    }
-  };
-
-  // Mouse handlers for desktop simulation
-  const handleMouseDown = (e) => {
-    e.preventDefault();
-    setTouchEnd(null);
-    setTouchStart(e.clientX);
-    setIsSwiping(true);
-  };
-
-  const handleMouseMove = (e) => {
-    if (!isSwiping) return;
-    e.preventDefault();
-    setTouchEnd(e.clientX);
-  };
-
-  const handleMouseUp = (e) => {
-    e.preventDefault();
-    setIsSwiping(false);
-    if (!touchStart || !touchEnd) return;
-
-    const distance = touchStart - touchEnd;
-    const isLeftSwipe = distance > 50;
-    const isRightSwipe = distance < -50;
-
-    console.log('Mouse swipe:', { distance, isLeftSwipe, isRightSwipe });
-
-    if (isLeftSwipe) {
-      nextProject();
-    } else if (isRightSwipe) {
-      prevProject();
-    }
-  };
-
-  // Global mouse event listeners for desktop simulation
-  useEffect(() => {
-    const handleGlobalMouseMove = (e) => {
-      if (isSwiping) {
-        handleMouseMove(e);
+  const reveal = reduce
+    ? {
+        initial: { opacity: 1, y: 0 },
+        whileInView: { opacity: 1, y: 0 },
       }
-    };
-
-    const handleGlobalMouseUp = (e) => {
-      if (isSwiping) {
-        handleMouseUp(e);
-      }
-    };
-
-    if (isSwiping) {
-      document.addEventListener('mousemove', handleGlobalMouseMove);
-      document.addEventListener('mouseup', handleGlobalMouseUp);
-    }
-
-    return () => {
-      document.removeEventListener('mousemove', handleGlobalMouseMove);
-      document.removeEventListener('mouseup', handleGlobalMouseUp);
-    };
-  }, [isSwiping, touchStart, touchEnd]);
-
-  const projects = [
-    {
-      id: 1,
-      title: ' This Website',
-      description:
-        'Modern, responsive portfolio website built with React and Tailwind CSS. Features smooth animations, and optimized performance for both desktop and mobile.',
-      image: '/api/placeholder/400/250',
-      tech: ['React', 'Tailwind CSS', 'Framer Motion', 'Vite'],
-      github: 'https://github.com/richiekosasih/richiedev.git',
-      demo: 'https://richiekosasih.com',
-      status: 'Deployed',
-      statusDescription: 'Live on the web',
-      featured: true,
-      preview: projectImage1,
-    },
-    {
-      id: 2,
-      title: 'Yummom Dashboard',
-      description:
-      'An internal dashboard designed for a small frozen food business to manage orders, products, and expenses in one place. Focused on simplifying daily operations and tracking order status efficiently.',
-      image: '/api/placeholder/400/250',
-      tech: ['React', 'JavaScript', 'Tailwind CSS', 'LocalStorage'],
-      github: 'https://github.com/richiekosasih/yummom-dashboard.git',
-      demo: '#',
-      status: 'In Progress',
-      statusDescription: 'Core features implemented, improving UI and structure',
-      featured: true,
-      preview: projectImage2,
-    },
-    {
-      id: 3,
-      title: 'AI-Powered Code Assistant',
-      description:
-        'Exploring AI integration in web development through a code suggestion and optimization tool. Focuses on improving developer productivity.',
-      image: '/api/placeholder/400/250',
-      tech: ['React', 'TypeScript', 'AI APIs', 'Monaco Editor'],
-      github: '#',
-      demo: '#',
-      status: 'Planning',
-      statusDescription: 'In early planning stages',
-      featured: false,
-      preview: inProgressImage,
-    },
-    {
-      id: 4,
-      title: 'Responsive E-Commerce UI',
-      description:
-        'Modern e-commerce interface design with focus on user experience, accessibility, and mobile-first approach. Clean and intuitive shopping experience.',
-      image: '/api/placeholder/400/250',
-      tech: ['React', 'Tailwind CSS', 'Framer Motion', 'Stripe API'],
-      github: '#',
-      demo: '#',
-      status: 'Concept',
-      statusDescription: 'Planning and design phase',
-      featured: false,
-      preview: inProgressImage,
-    },
-  ];
-
-  // Enhanced animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: {
-      opacity: 0,
-      y: 60,
-      scale: 0.9,
-      rotateX: -15,
-    },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      rotateX: 0,
-      transition: {
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
-  const titleVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
-
-  const subtitleVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.8,
-        delay: 0.2,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    },
-  };
+    : {
+        initial: { opacity: 0, y: 28 },
+        whileInView: { opacity: 1, y: 0 },
+      };
 
   return (
-    <Section id='projects' className='relative overflow-hidden'>
-      {/* Animated Background Elements */}
-      <div className='absolute inset-0 -z-10'>
-        <div className='absolute top-1/4 left-1/4 w-96 h-96 bg-gradient-to-r from-amber-500/5 to-orange-500/5 rounded-full blur-3xl animate-pulse'></div>
-        <div className='absolute bottom-1/4 right-1/4 w-80 h-80 bg-gradient-to-r from-stone-500/5 to-neutral-500/5 rounded-full blur-3xl animate-pulse delay-1000'></div>
-      </div>
-
-      {/* Enhanced Header */}
-      <motion.div
-        className='text-center mb-16'
-        variants={titleVariants}
-        initial='hidden'
-        whileInView='visible'
-        viewport={{ once: true, amount: 0.3 }}
-      >
-        <motion.div
-          className='mb-4'
-          whileHover={{ scale: 1.02 }}
-          transition={{ duration: 0.2 }}
-        >
-          <span className='text-sm font-mono text-gray-400 uppercase tracking-wider'>
-            Projects
-          </span>
-        </motion.div>
-
-        <h2
-          className='text-[40px] leading-none sm:text-[50px] sm:leading-none lg:text-[120px] lg:leading-none font-black tracking-tight uppercase text-white mb-4'
-          style={{ letterSpacing: '-0.02em' }}
-        >
-          WHAT I BUILT
-        </h2>
-
-        <div className='w-16 h-0.5 bg-white mx-auto mb-8 sm:mb-12'></div>
-      </motion.div>
-
-      {/* Mobile Grid Layout - Show All Projects */}
-      <div className='lg:hidden mb-16'>
-        <motion.div
-          variants={containerVariants}
-          initial='hidden'
-          whileInView='visible'
-          viewport={{ once: true, amount: 0.2 }}
-          className='grid grid-cols-1 gap-8'
-        >
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.id}
-              variants={cardVariants}
-              className='relative bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm rounded-2xl border border-stone-300/40 overflow-hidden group'
+    <section
+      id='projects'
+      className='relative overflow-hidden bg-black px-4 py-16 text-[#f4f2e8] sm:px-6 md:px-10 md:py-24'
+      aria-labelledby='projects-title'
+    >
+      <div className='mx-auto max-w-[1500px]'>
+        <div className='grid gap-8 lg:grid-cols-[1fr_0.85fr] lg:items-end'>
+          <div>
+            <motion.p
+              {...reveal}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.7, ease }}
+              className='font-mono text-xs uppercase text-white/45'
             >
-              {/* Project Image */}
-              <div className='relative h-48 sm:h-56'>
-                <img
-                  src={project.preview}
-                  alt={project.title}
-                  className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-500'
-                  loading='lazy'
-                />
-                <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent'></div>
+              Selected work
+            </motion.p>
+            <motion.h2
+              id='projects-title'
+              {...reveal}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.8, ease, delay: reduce ? 0 : 0.05 }}
+              className='mt-4 font-display text-[clamp(4.8rem,16vw,17rem)] uppercase leading-[0.78] tracking-normal'
+            >
+              What I
+              <span className='block'>built</span>
+            </motion.h2>
+          </div>
+          <motion.p
+            {...reveal}
+            viewport={{ once: true, amount: 0.35 }}
+            transition={{ duration: 0.8, ease, delay: reduce ? 0 : 0.1 }}
+            className='max-w-2xl font-mono text-sm leading-7 text-white/65'
+          >
+            Fewer projects, stronger evidence. Each featured item should tell a
+            recruiter what problem it solves, what I built, and why it matters.
+          </motion.p>
+        </div>
 
-                {/* Project Title Overlay */}
-                <div className='absolute bottom-4 left-4 right-4'>
-                  <h3 className='text-white font-black text-xl tracking-tight'>
-                    {project.title}
-                  </h3>
+        <div className='mt-10 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]'>
+          <TiltCard
+            initial={reduce ? false : { opacity: 0, y: 26 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.8, ease }}
+            className='relative min-h-[360px] overflow-hidden border border-white/25 bg-white/[0.04] lg:min-h-[620px]'
+          >
+            <motion.img
+              key={activeProject.title}
+              src={activeProject.image}
+              alt={`${activeProject.title} preview`}
+              className='h-full min-h-[360px] w-full object-cover grayscale transition duration-500 hover:grayscale-0 lg:min-h-[620px]'
+              initial={reduce ? false : { scale: 1.05, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.65, ease }}
+              loading='lazy'
+            />
+            <div className='absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/60 to-transparent p-5'>
+              <p className='font-mono text-xs uppercase text-white/55'>
+                Preview
+              </p>
+              <h3 className='mt-1 font-display text-5xl uppercase leading-none tracking-normal'>
+                {activeProject.title}
+              </h3>
+            </div>
+          </TiltCard>
+
+          <motion.div
+            className='grid gap-4'
+            initial='initial'
+            whileInView='whileInView'
+            viewport={{ once: true, amount: 0.2 }}
+            variants={{
+              whileInView: {
+                transition: { staggerChildren: reduce ? 0 : 0.1 },
+              },
+            }}
+          >
+            {projects.map((project, index) => (
+              <TiltCard
+                as='article'
+                key={project.title}
+                onMouseEnter={() => setActiveProject(project)}
+                onFocus={() => setActiveProject(project)}
+                variants={
+                  reduce
+                    ? { initial: { opacity: 1, y: 0 }, whileInView: { opacity: 1, y: 0 } }
+                    : { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 } }
+                }
+                transition={{ duration: 0.75, ease }}
+                className='group border border-white/20 bg-white/[0.03] p-5 transition-colors hover:bg-[#f4f2e8] hover:text-black sm:p-6'
+              >
+                <div className='flex items-start justify-between gap-4 border-b border-white/15 pb-4 transition-colors group-hover:border-black/20'>
+                  <div>
+                    <p className='font-mono text-xs uppercase text-white/45 transition-colors group-hover:text-black/45'>
+                      {project.eyebrow} / 0{index + 1}
+                    </p>
+                    <h3 className='mt-3 font-display text-5xl uppercase leading-none tracking-normal md:text-6xl'>
+                      {project.title}
+                    </h3>
+                  </div>
+                  <span className='hidden font-display text-6xl leading-none text-white/15 transition-colors group-hover:text-black/15 sm:block'>
+                    0{index + 1}
+                  </span>
                 </div>
-              </div>
 
-              {/* Project Info */}
-              <div className='p-6 space-y-4'>
-                {/* Description */}
-                <p className='text-gray-300 text-sm leading-6 font-mono'>
+                <p className='mt-5 text-base leading-7 text-white/70 transition-colors group-hover:text-black/70'>
                   {project.description}
                 </p>
+                <p className='mt-3 font-mono text-xs uppercase leading-6 text-white/45 transition-colors group-hover:text-black/50'>
+                  {project.impact}
+                </p>
 
-                {/* Status */}
-                <div className='flex items-center justify-between'>
-                  <div>
-                    <span className='text-white font-mono text-sm font-semibold'>
-                      {project.status}
-                    </span>
-                    <p className='text-gray-400 font-mono text-xs mt-1'>
-                      {project.statusDescription}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Tech Stack */}
-                <div className='flex flex-wrap gap-2'>
+                <div className='mt-5 flex flex-wrap gap-2'>
                   {project.tech.map((tech) => (
                     <span
                       key={tech}
-                      className='px-2 py-1 text-xs font-mono bg-white/10 text-white rounded-full border border-white/20'
+                      className='border border-white/20 px-3 py-2 font-mono text-[11px] uppercase text-white/65 transition-colors group-hover:border-black/25 group-hover:text-black/65'
                     >
                       {tech}
                     </span>
                   ))}
                 </div>
 
-                {/* Project Link */}
-                <div className='pt-2'>
-                  {project.github !== '#' ? (
-                    <motion.a
-                      href={project.github}
+                <div className='mt-6 flex flex-wrap gap-3'>
+                  <a
+                    href={project.github}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='inline-flex items-center gap-2 border border-white/25 px-4 py-3 font-mono text-xs uppercase transition-colors hover:bg-black hover:text-[#f4f2e8] group-hover:border-black'
+                  >
+                    <Github className='h-4 w-4' />
+                    GitHub
+                  </a>
+                  {project.demo && (
+                    <a
+                      href={project.demo}
                       target='_blank'
                       rel='noopener noreferrer'
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      className='inline-flex items-center gap-2 border border-white/25 px-4 py-3 font-mono text-xs uppercase transition-colors hover:bg-black hover:text-[#f4f2e8] group-hover:border-black'
                     >
-                      <Button
-                        variant='outline'
-                        size='sm'
-                        className='w-full bg-transparent border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 backdrop-blur-sm font-mono'
-                      >
-                        <Github className='w-4 h-4 mr-2' />
-                        VIEW PROJECT
-                      </Button>
-                    </motion.a>
-                  ) : (
-                    <Button
-                      variant='outline'
-                      size='sm'
-                      disabled
-                      className='w-full bg-transparent border-2 border-white/20 text-white/50 cursor-not-allowed backdrop-blur-sm font-mono'
-                    >
-                      <Github className='w-4 h-4 mr-2' />
-                      COMING SOON
-                    </Button>
+                      <ExternalLink className='h-4 w-4' />
+                      Live
+                    </a>
                   )}
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-      </div>
+              </TiltCard>
+            ))}
 
-      {/* Desktop Layout - Single Project with Navigation */}
-      <motion.div
-        variants={containerVariants}
-        initial='hidden'
-        whileInView='visible'
-        viewport={{ once: true, amount: 0.2 }}
-        className='hidden lg:grid lg:grid-cols-2 gap-12 mb-16 min-h-[600px]'
-      >
-        {/* Project Info - Desktop */}
-        <motion.div
-          variants={cardVariants}
-          className='flex flex-col justify-center space-y-8 relative'
-        >
-          {/* Beige accent box */}
-          <div className='absolute -left-4 -top-4 w-32 h-32 bg-amber-100/20 rounded-2xl blur-sm'></div>
-          <div className='absolute -right-8 -bottom-8 w-24 h-24 bg-amber-200/30 rounded-xl blur-sm'></div>
-          <div className='space-y-6'>
-            {/* Project Title */}
-            <motion.h3
-              className='text-5xl font-black text-white tracking-tight'
-              key={currentProjectIndex}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+            <motion.aside
+              variants={
+                reduce
+                  ? { initial: { opacity: 1, y: 0 }, whileInView: { opacity: 1, y: 0 } }
+                  : { initial: { opacity: 0, y: 24 }, whileInView: { opacity: 1, y: 0 } }
+              }
+              transition={{ duration: 0.75, ease }}
+              className='border border-dashed border-white/25 p-5 sm:p-6'
             >
-              {projects[currentProjectIndex].title}
-            </motion.h3>
-
-            {/* Project Description */}
-            <motion.p
-              className='text-lg text-gray-300 leading-7 tracking-wide font-mono'
-              key={`desc-${currentProjectIndex}`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-            >
-              {projects[currentProjectIndex].description}
-            </motion.p>
-
-            {/* Divider Line with Beige Accent */}
-            <div className='relative'>
-              <div className='w-20 h-1 bg-amber-200/40 rounded-full'></div>
-              <div className='absolute top-0 left-0 w-16 h-0.5 bg-white rounded-full'></div>
-            </div>
-
-            {/* Project Status */}
-            <motion.div
-              key={`status-${currentProjectIndex}`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
-            >
-              <span className='text-lg font-mono text-white'>
-                {projects[currentProjectIndex].status}
-              </span>
-              <p className='text-sm text-gray-400 font-mono mt-1'>
-                {projects[currentProjectIndex].statusDescription}
+              <p className='font-mono text-xs uppercase text-white/45'>
+                Explorations
               </p>
-            </motion.div>
-
-            {/* Tech Stack */}
-            <motion.div
-              className='relative p-4 bg-amber-100/10 rounded-2xl border border-amber-200/20'
-              key={`tech-${currentProjectIndex}`}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
-              <div className='flex flex-wrap gap-2'>
-                {projects[currentProjectIndex].tech.map((tech, techIndex) => (
-                  <span
-                    key={tech}
-                    className='px-3 py-1 text-xs font-mono bg-white/10 text-white rounded-full border border-white/20 backdrop-blur-sm'
+              <div className='mt-4 grid gap-3 sm:grid-cols-3'>
+                {explorations.map((item) => (
+                  <div
+                    key={item}
+                    className='min-h-28 border border-white/15 bg-white/[0.03] p-4'
+                    style={{
+                      backgroundImage: `linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)`,
+                      backgroundSize: '18px 18px',
+                    }}
                   >
-                    {tech}
-                  </span>
+                    <img
+                      src={inProgressPreview}
+                      alt=''
+                      className='mb-3 h-12 w-12 rounded-full object-cover opacity-50 grayscale'
+                      loading='lazy'
+                    />
+                    <p className='font-mono text-xs uppercase leading-5 text-white/65'>
+                      {item}
+                    </p>
+                  </div>
                 ))}
               </div>
-            </motion.div>
-          </div>
-
-          {/* Project Links */}
-          <motion.div
-            className='flex items-center space-x-4'
-            key={`links-${currentProjectIndex}`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.4 }}
-          >
-            {projects[currentProjectIndex].github !== '#' ? (
-              <motion.a
-                href={projects[currentProjectIndex].github}
-                target='_blank'
-                rel='noopener noreferrer'
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <Button
-                  variant='outline'
-                  size='lg'
-                  className='flex items-center space-x-2 bg-transparent border-2 border-white/20 text-white hover:bg-white/10 hover:border-white/30 backdrop-blur-sm font-mono px-6 py-3'
-                >
-                  <Github className='w-5 h-5' />
-                  <span>VIEW PROJECT</span>
-                </Button>
-              </motion.a>
-            ) : (
-              <Button
-                variant='outline'
-                size='lg'
-                disabled
-                className='flex items-center space-x-2 bg-transparent border-2 border-white/20 text-white/50 cursor-not-allowed backdrop-blur-sm font-mono px-6 py-3'
-              >
-                <Github className='w-5 h-5' />
-                <span>COMING SOON</span>
-              </Button>
-            )}
+            </motion.aside>
           </motion.div>
-
-          {/* Project Counter */}
-          <motion.div
-            className='text-sm text-gray-400 font-mono'
-            key={`counter-${currentProjectIndex}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-          >
-            {currentProjectIndex + 1} of {projects.length} projects
-          </motion.div>
-        </motion.div>
-
-        {/* Project Visual - Desktop */}
-        <motion.div
-          variants={cardVariants}
-          className='relative flex items-center justify-center'
-        >
-          {/* Beige accent elements */}
-          <div className='absolute -top-8 -right-4 w-20 h-20 bg-stone-300/15 rounded-3xl blur-sm'></div>
-          <div className='absolute -bottom-6 -left-6 w-16 h-16 bg-stone-400/20 rounded-2xl blur-sm'></div>
-          <motion.div
-            className='relative w-full max-w-md h-96 rounded-2xl bg-gradient-to-br from-gray-800/60 to-gray-900/60 backdrop-blur-sm flex items-center justify-center border-2 border-stone-300/40 cursor-pointer group overflow-hidden'
-            key={`visual-${currentProjectIndex}`}
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            whileHover={{
-              scale: 1.02,
-              borderColor: 'rgba(180, 83, 9, 0.4)',
-              boxShadow: '0 0 20px rgba(180, 83, 9, 0.15)',
-            }}
-            transition={{
-              duration: 0.6,
-              ease: [0.22, 1, 0.36, 1],
-              hover: { duration: 0.3 },
-            }}
-          >
-            {/* Project Preview Image */}
-            <div className='relative w-full h-full'>
-              {/* Preview Image */}
-              <motion.img
-                src={projects[currentProjectIndex].preview}
-                alt={projects[currentProjectIndex].title}
-                className='w-full h-full object-cover rounded-xl group-hover:scale-105 transition-transform duration-500'
-                key={`preview-${currentProjectIndex}`}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                loading='lazy'
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                  e.target.nextElementSibling.style.display = 'flex';
-                }}
-              />
-
-              {/* Fallback when image fails to load */}
-              <div className='absolute inset-0 bg-gradient-to-br from-gray-700/60 to-gray-800/80 rounded-xl items-center justify-center hidden'>
-                <div className='text-center'>
-                  <div className='text-white font-black text-lg tracking-tight'>
-                    {projects[currentProjectIndex].title}
-                  </div>
-                </div>
-              </div>
-
-              {/* Overlay Gradient */}
-              <div className='absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent rounded-xl'></div>
-
-              {/* Project Title Overlay */}
-              <div className='absolute bottom-4 left-4 right-4'>
-                <div className='text-white font-black text-lg tracking-tight group-hover:text-stone-200 transition-colors duration-300'>
-                  {projects[currentProjectIndex].title
-                    .split(' ')
-                    .map((word, index) => (
-                      <div
-                        key={index}
-                        className='group-hover:translate-y-[-2px] transition-transform duration-300'
-                        style={{ transitionDelay: `${index * 0.05}s` }}
-                      >
-                        {word}
-                      </div>
-                    ))}
-                </div>
-              </div>
-            </div>
-          </motion.div>
-        </motion.div>
-      </motion.div>
-
-      {/* Navigation Buttons - Desktop Only */}
-      <motion.div
-        className='hidden lg:flex items-center justify-center space-x-4 mb-12'
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-      >
-        <motion.button
-          onClick={prevProject}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className='w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300'
-        >
-          <ChevronLeft className='w-5 h-5 sm:w-6 sm:h-6' />
-        </motion.button>
-
-        <div className='flex space-x-1.5 sm:space-x-2'>
-          {projects.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentProjectIndex(index)}
-              className={`w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full transition-all duration-300 ${
-                index === currentProjectIndex
-                  ? 'bg-orange-400'
-                  : 'bg-white/60 hover:bg-white/80'
-              }`}
-            />
-          ))}
         </div>
 
-        <motion.button
-          onClick={nextProject}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className='w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300'
+        <motion.div
+          {...reveal}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease, delay: reduce ? 0 : 0.15 }}
+          className='mt-12 border-y border-white/20 py-3 text-white/80'
         >
-          <ChevronRight className='w-5 h-5 sm:w-6 sm:h-6' />
-        </motion.button>
-      </motion.div>
-    </Section>
+          <KineticMarquee
+            items={['Problem', 'Process', 'Interface', 'Outcome']}
+            speedSeconds={20}
+            reverse
+          />
+        </motion.div>
+      </div>
+    </section>
   );
-};
-
-export default Projects;
+}
