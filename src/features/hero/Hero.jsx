@@ -14,7 +14,7 @@ import photorichiemono from '@/assets/images/photorichiemono.jpg';
 const roles = [
   'Frontend Development',
   'ICT Support',
-  'Business Systems',
+  'Business Analyst',
 ];
 
 const proofPoints = [
@@ -174,7 +174,7 @@ export default function Hero() {
             >
               <div className='font-mono text-xs uppercase leading-6 text-black/65'>
                 Available for entry-level opportunities in web, IT support, and
-                business systems.
+                business analyst.
               </div>
               <div className='flex flex-wrap gap-2'>
                 {roles.map((role) => (
@@ -239,9 +239,7 @@ export default function Hero() {
             items={[
               'Frontend',
               'IT Support',
-              'Business Systems',
-              'React',
-              'Melbourne',
+              'Business Analyst',
             ]}
             speedSeconds={26}
           />

@@ -34,7 +34,7 @@ const socialItems = [
 const professions = [
   'Frontend Developer',
   'ICT Support',
-  'Business Systems',
+  'Business Analyst',
   'React Builder',
 ];
 

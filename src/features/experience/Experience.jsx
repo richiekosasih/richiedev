@@ -11,7 +11,7 @@ const categories = [
     items: ['Ticket handling', 'User support', 'Azure', 'Microsoft Entra ID', 'Cisco Meraki'],
   },
   {
-    title: 'Business Systems',
+    title: 'Business Analyst',
     items: ['Requirements', 'Process mapping', 'Excel', 'SQL basics', 'KPI tracking'],
   },
   {

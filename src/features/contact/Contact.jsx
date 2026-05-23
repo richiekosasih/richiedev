@@ -69,8 +69,7 @@ export default function Contact() {
             transition={{ duration: 0.8, ease, delay: reduce ? 0 : 0.12 }}
             className='max-w-xl text-xl leading-8 text-black/70 md:text-2xl md:leading-9'
           >
-            I am open to junior frontend, IT support, business systems, and
-            graduate technology opportunities in Melbourne.
+            I am open to junior frontend, IT support, business analyst, and
           </motion.p>
         </div>
 

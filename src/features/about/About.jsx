@@ -70,14 +70,11 @@ export default function About() {
           className='grid gap-7'
         >
           <p className='text-xl leading-8 md:text-2xl md:leading-9'>
-            I am a frontend-focused Master of IT student in Melbourne with a
-            background in ICT support, business operations, and practical React
-            projects.
+            I solve business problems through practical technology.
           </p>
           <p className='font-mono text-sm leading-7 text-black/65'>
-            My strongest lane is connecting user needs, business process, and
-            clean UI implementation. I like building interfaces that are clear,
-            responsive, and useful for real daily workflows.
+          My strength is connecting user needs, business processes, and practical technology. 
+          I enjoy improving workflows, supporting users, and exploring AI-assisted automation to make work clearer and more efficient.
           </p>
           <div className='flex flex-wrap gap-3'>
             {links.map(({ label, href, icon: Icon }) => (
@@ -119,8 +116,7 @@ export default function About() {
           className='grid gap-4 font-mono text-xs uppercase leading-6 text-black/65 md:grid-cols-3'
         >
           <p>
-            Currently studying Master of Information Technology (Extension) at
-            Kaplan Business School.
+            Practical IT experience in ICT support, business operations, and web development.
           </p>
           <p>
             Hands-on with React, Tailwind, JavaScript, Azure, Entra ID, Cisco
