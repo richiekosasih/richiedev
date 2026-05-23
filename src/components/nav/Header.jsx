@@ -104,12 +104,6 @@ export default function Header() {
 
           <div className='ml-auto hidden items-center gap-3 md:flex'>
             <a
-              href='mailto:richiekosasihdev@gmail.com'
-              className='font-mono text-[11px] uppercase text-white/65 transition-colors hover:text-white'
-            >
-              Email
-            </a>
-            <a
               href='/RichiePKosasih_Resume.pdf'
               target='_blank'
               rel='noopener noreferrer'
